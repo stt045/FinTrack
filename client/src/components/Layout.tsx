@@ -1,9 +1,10 @@
 import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
-import { TrendingUp, Wallet, Home, Car, LayoutDashboard, Menu, X, MessageSquare } from "lucide-react";
+import { TrendingUp, Wallet, Home, Car, LayoutDashboard, Menu, X, MessageSquare, LogIn, LogOut } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useAuth } from "@/hooks/useAuth";
 
 const navItems = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -17,6 +18,7 @@ const navItems = [
 export function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { isAuthenticated, isLoading } = useAuth();
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -55,6 +57,27 @@ export function Layout({ children }: { children: React.ReactNode }) {
             })}
           </nav>
 
+          {/* Auth Button */}
+          <div className="flex items-center gap-2">
+            {!isLoading && (
+              isAuthenticated ? (
+                <a href="/api/logout" className="hidden md:block">
+                  <Button variant="outline" size="sm" className="flex items-center gap-2" data-testid="button-logout">
+                    <LogOut className="h-4 w-4" />
+                    Log out
+                  </Button>
+                </a>
+              ) : (
+                <a href="/api/login" className="hidden md:block">
+                  <Button size="sm" className="flex items-center gap-2" data-testid="button-login">
+                    <LogIn className="h-4 w-4" />
+                    Log in
+                  </Button>
+                </a>
+              )
+            )}
+          </div>
+
           {/* Mobile Menu Toggle */}
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
             <SheetTrigger asChild className="md:hidden">
@@ -84,6 +107,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     </Link>
                   );
                 })}
+                <div className="border-t pt-4 mt-4">
+                  {!isLoading && (
+                    isAuthenticated ? (
+                      <a href="/api/logout" className="block">
+                        <Button variant="outline" className="w-full flex items-center gap-2" data-testid="button-logout-mobile">
+                          <LogOut className="h-4 w-4" />
+                          Log out
+                        </Button>
+                      </a>
+                    ) : (
+                      <a href="/api/login" className="block">
+                        <Button className="w-full flex items-center gap-2" data-testid="button-login-mobile">
+                          <LogIn className="h-4 w-4" />
+                          Log in
+                        </Button>
+                      </a>
+                    )
+                  )}
+                </div>
               </div>
             </SheetContent>
           </Sheet>

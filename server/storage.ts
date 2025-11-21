@@ -1,32 +1,40 @@
-import { type User, type InsertUser, type Feedback, type InsertFeedback, users, feedback } from "@shared/schema";
+import { type User, type UpsertUser, type Feedback, type InsertFeedback, users, feedback } from "@shared/schema";
 import { db } from "./db";
 import { desc, lt, eq } from "drizzle-orm";
 
 export interface IStorage {
+  // User operations (required for Replit Auth)
   getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  upsertUser(user: UpsertUser): Promise<User>;
   
+  // Feedback operations
   createFeedback(data: InsertFeedback): Promise<Feedback>;
   getFeedback(limit: number, cursor?: string): Promise<Feedback[]>;
 }
 
 export class DatabaseStorage implements IStorage {
+  // User operations (required for Replit Auth)
   async getUser(id: string): Promise<User | undefined> {
     const result = await db.select().from(users).where(eq(users.id, id)).limit(1);
     return result[0];
   }
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    const result = await db.select().from(users).where(eq(users.username, username)).limit(1);
-    return result[0];
+  async upsertUser(userData: UpsertUser): Promise<User> {
+    const [user] = await db
+      .insert(users)
+      .values(userData)
+      .onConflictDoUpdate({
+        target: users.id,
+        set: {
+          ...userData,
+          updatedAt: new Date(),
+        },
+      })
+      .returning();
+    return user;
   }
 
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const result = await db.insert(users).values(insertUser).returning();
-    return result[0];
-  }
-
+  // Feedback operations
   async createFeedback(data: InsertFeedback): Promise<Feedback> {
     const result = await db.insert(feedback).values(data).returning();
     return result[0];
