@@ -4,14 +4,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export function MortgageCalculator() {
   const [homePrice, setHomePrice] = useState(350000);
   const [downPayment, setDownPayment] = useState(70000);
   const [rate, setRate] = useState(6.5);
   const [term, setTerm] = useState(30);
+  const [viewMode, setViewMode] = useState("annual");
 
-  const { monthlyPayment, totalInterest, data } = useMemo(() => {
+  const { monthlyPayment, totalInterest, annualData, monthlyData } = useMemo(() => {
     const loanAmount = homePrice - downPayment;
     const r = rate / 100 / 12;
     const n = term * 12;
@@ -21,7 +24,8 @@ export function MortgageCalculator() {
     
     let balance = loanAmount;
     let totalInt = 0;
-    const chartData = [];
+    const annualData = [];
+    const monthlyData = [];
 
     // Group by year for chart clarity
     for (let year = 1; year <= term; year++) {
@@ -36,10 +40,20 @@ export function MortgageCalculator() {
         yearlyPrincipal += principalPayment;
         balance -= principalPayment;
         totalInt += interestPayment;
+
+        monthlyData.push({
+          period: `Month ${((year - 1) * 12) + m + 1}`,
+          payment: monthly,
+          principal: principalPayment,
+          interest: interestPayment,
+          balance: Math.max(0, balance)
+        });
       }
 
-      chartData.push({
+      annualData.push({
         year: `Year ${year}`,
+        period: `Year ${year}`,
+        payment: monthly * 12,
         principal: Math.round(yearlyPrincipal),
         interest: Math.round(yearlyInterest),
         balance: Math.round(Math.max(0, balance))
@@ -49,9 +63,12 @@ export function MortgageCalculator() {
     return {
       monthlyPayment: monthly,
       totalInterest: totalInt,
-      data: chartData
+      annualData,
+      monthlyData
     };
   }, [homePrice, downPayment, rate, term]);
+
+  const displayData = viewMode === "annual" ? annualData : monthlyData;
 
   return (
     <div className="grid lg:grid-cols-3 gap-8">
@@ -130,13 +147,23 @@ export function MortgageCalculator() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Amortization Schedule</CardTitle>
-            <CardDescription>Yearly breakdown of Principal vs Interest</CardDescription>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle>Amortization Schedule</CardTitle>
+                <CardDescription>Breakdown of Principal vs Interest</CardDescription>
+              </div>
+              <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as any)} className="w-[200px]">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="annual">Annual</TabsTrigger>
+                  <TabsTrigger value="monthly">Monthly</TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="h-[400px] w-full">
+          <CardContent className="space-y-6">
+            <div className="h-[300px] w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                <BarChart data={annualData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--color-border)" />
                   <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fontSize: 10 }} interval={term > 20 ? 4 : 1} />
                   <YAxis axisLine={false} tickLine={false} tickFormatter={(val) => `$${val/1000}k`} />
@@ -149,6 +176,33 @@ export function MortgageCalculator() {
                   <Bar dataKey="interest" stackId="a" fill="var(--color-chart-4)" name="Interest" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
+            </div>
+
+            <div className="border rounded-md overflow-hidden">
+              <div className="max-h-[400px] overflow-y-auto">
+                <Table>
+                  <TableHeader className="sticky top-0 bg-card z-10">
+                    <TableRow>
+                      <TableHead>Period</TableHead>
+                      <TableHead className="text-right">Payment</TableHead>
+                      <TableHead className="text-right">Principal</TableHead>
+                      <TableHead className="text-right">Interest</TableHead>
+                      <TableHead className="text-right">Balance</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {displayData.map((row, i) => (
+                      <TableRow key={i}>
+                        <TableCell className="font-medium">{row.period}</TableCell>
+                        <TableCell className="text-right font-mono">${Math.round(row.payment).toLocaleString()}</TableCell>
+                        <TableCell className="text-right font-mono text-primary">${Math.round(row.principal).toLocaleString()}</TableCell>
+                        <TableCell className="text-right font-mono text-destructive">${Math.round(row.interest).toLocaleString()}</TableCell>
+                        <TableCell className="text-right font-mono">${Math.round(row.balance).toLocaleString()}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
             </div>
           </CardContent>
         </Card>
