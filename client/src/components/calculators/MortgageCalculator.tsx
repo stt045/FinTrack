@@ -285,11 +285,11 @@ export function MortgageCalculator() {
                           {isYearMark && (
                             <TableRow className="hover:bg-transparent">
                               <TableCell colSpan={5} className="p-0">
-                                <UITooltip>
+                                <UITooltip delayDuration={0}>
                                   <TooltipTrigger asChild>
-                                    <div className="h-2 bg-muted-foreground/10 w-full my-2 relative group cursor-help">
+                                    <div className="h-2 bg-muted-foreground/10 w-full my-2 relative group cursor-help hover:bg-primary/20 transition-colors">
                                       <div className="absolute inset-0 flex items-center justify-center">
-                                        <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <span className="text-xs font-bold text-primary uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">
                                           Year {yearNum} Completed
                                         </span>
                                       </div>
