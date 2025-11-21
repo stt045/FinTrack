@@ -9,11 +9,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export function MortgageCalculator() {
-  const [homePrice, setHomePrice] = useState(350000);
-  const [downPayment, setDownPayment] = useState(70000);
-  const [rate, setRate] = useState(6.5);
+  const [homePrice, setHomePrice] = useState(800000);
+  const [downPayment, setDownPayment] = useState(160000);
+  const [rate, setRate] = useState(6);
   const [term, setTerm] = useState(30);
-  const [viewMode, setViewMode] = useState("annual");
+  const [viewMode, setViewMode] = useState("monthly");
   
   // Additional Costs
   const [propertyTax, setPropertyTax] = useState(3000); // Annual
