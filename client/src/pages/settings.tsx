@@ -269,6 +269,7 @@ function ProfileTab({ user }: { user: any }) {
                   onClick={() => updatePasswordMutation.mutate()}
                   disabled={updatePasswordMutation.isPending}
                   data-testid="button-confirm-password"
+                  className="cursor-pointer"
                 >
                   {updatePasswordMutation.isPending ? "Updating..." : "Update Password"}
                 </Button>
@@ -280,6 +281,7 @@ function ProfileTab({ user }: { user: any }) {
                     setNewPassword("");
                     setConfirmPassword("");
                   }}
+                  className="cursor-pointer"
                 >
                   Cancel
                 </Button>
