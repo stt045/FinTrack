@@ -1,10 +1,11 @@
 import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
-import { TrendingUp, Wallet, Home, Car, LayoutDashboard, Menu, X, MessageSquare, LogIn, LogOut } from "lucide-react";
+import { TrendingUp, Wallet, Home, Car, LayoutDashboard, Menu, MessageSquare, LogIn } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "@/hooks/useAuth";
+import { ProfileMenu } from "@/components/ProfileMenu";
 
 const navItems = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -61,12 +62,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <div className="flex items-center gap-2">
             {!isLoading && (
               isAuthenticated ? (
-                <Button asChild variant="outline" size="sm" className="hidden md:flex items-center gap-2" data-testid="button-logout">
-                  <a href="/api/logout">
-                    <LogOut className="h-4 w-4" />
-                    Log out
-                  </a>
-                </Button>
+                <div className="hidden md:block">
+                  <ProfileMenu />
+                </div>
               ) : (
                 <Button asChild size="sm" className="hidden md:flex items-center gap-2" data-testid="button-login">
                   <a href="/api/login">
@@ -107,15 +105,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     </Link>
                   );
                 })}
-                <div className="border-t pt-4 mt-4">
+                <div className="border-t pt-4 mt-4 md:hidden">
                   {!isLoading && (
                     isAuthenticated ? (
-                      <Button asChild variant="outline" className="w-full flex items-center gap-2" data-testid="button-logout-mobile">
-                        <a href="/api/logout">
-                          <LogOut className="h-4 w-4" />
-                          Log out
-                        </a>
-                      </Button>
+                      <div className="space-y-2">
+                        <Button asChild variant="outline" className="w-full">
+                          <Link href="/settings">Settings</Link>
+                        </Button>
+                        <Button asChild variant="outline" className="w-full">
+                          <a href="/api/logout">Log out</a>
+                        </Button>
+                      </div>
                     ) : (
                       <Button asChild className="w-full flex items-center gap-2" data-testid="button-login-mobile">
                         <a href="/api/login">

@@ -46,6 +46,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // User profile update
+  app.put("/api/user/profile", async (req: any, res) => {
+    try {
+      if (!req.isAuthenticated() || !req.user) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      const userId = req.user.claims.sub;
+      const { firstName, lastName } = req.body;
+
+      const updatedUser = await storage.updateUserProfile(userId, firstName, lastName);
+      res.json(updatedUser);
+    } catch (error) {
+      console.error("Error updating user profile:", error);
+      res.status(500).json({ message: "Failed to update profile" });
+    }
+  });
+
+  // Password change endpoint (stub for now - Replit Auth doesn't support password management)
+  app.put("/api/user/password", async (req: any, res) => {
+    try {
+      if (!req.isAuthenticated() || !req.user) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      // Note: Replit Auth handles password management through their OAuth flow
+      // This is a placeholder - actual password changes would need to be implemented
+      // with a custom auth system or external service
+      res.status(501).json({ message: "Password changes are managed through your account settings" });
+    } catch (error) {
+      console.error("Error updating password:", error);
+      res.status(500).json({ message: "Failed to update password" });
+    }
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;

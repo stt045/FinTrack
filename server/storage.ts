@@ -6,6 +6,7 @@ export interface IStorage {
   // User operations (required for Replit Auth)
   getUser(id: string): Promise<User | undefined>;
   upsertUser(user: UpsertUser): Promise<User>;
+  updateUserProfile(id: string, firstName?: string | null, lastName?: string | null): Promise<User>;
   
   // Feedback operations
   createFeedback(data: InsertFeedback): Promise<Feedback>;
@@ -30,6 +31,19 @@ export class DatabaseStorage implements IStorage {
           updatedAt: new Date(),
         },
       })
+      .returning();
+    return user;
+  }
+
+  async updateUserProfile(id: string, firstName?: string | null, lastName?: string | null): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({
+        ...(firstName !== undefined && { firstName }),
+        ...(lastName !== undefined && { lastName }),
+        updatedAt: new Date(),
+      })
+      .where(eq(users.id, id))
       .returning();
     return user;
   }

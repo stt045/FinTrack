@@ -15,6 +15,7 @@ import WithdrawalPage from "@/pages/withdrawal";
 import MortgagePage from "@/pages/mortgage";
 import AutoLoanPage from "@/pages/auto-loan";
 import FeedbackPage from "@/pages/feedback";
+import SettingsPage from "@/pages/settings";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -53,6 +54,7 @@ function Router() {
       <Route path="/mortgage" component={MortgagePage} />
       <Route path="/auto-loan" component={AutoLoanPage} />
       <Route path="/feedback" component={FeedbackPage} />
+      <Route path="/settings" component={SettingsPage} />
       <Route component={NotFound} />
     </Switch>
   );
