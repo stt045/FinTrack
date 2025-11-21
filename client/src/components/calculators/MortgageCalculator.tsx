@@ -17,7 +17,7 @@ export function MortgageCalculator() {
   const [viewMode, setViewMode] = useState("monthly");
   
   // Additional Costs
-  const [propertyTax, setPropertyTax] = useState(3000); // Annual
+  const [propertyTax, setPropertyTax] = useState(8000); // Annual, defaults to 1% of 800k
   const [homeInsurance, setHomeInsurance] = useState(1000); // Annual
   const [hoaFees, setHoaFees] = useState(0); // Monthly
   const [melloRoos, setMelloRoos] = useState(0); // Annual
