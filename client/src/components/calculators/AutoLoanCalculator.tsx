@@ -9,6 +9,23 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { TooltipProvider, Tooltip as UITooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, AreaChart, Area, XAxis, YAxis, CartesianGrid, BarChart, Bar } from "recharts";
 
+interface TooltipPayload {
+  payload?: Record<string, any>;
+}
+
+const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: TooltipPayload[] }) => {
+  if (active && payload && payload[0] && payload[0].payload) {
+    const data = payload[0].payload;
+    return (
+      <div className="bg-card border border-border rounded-md p-2 shadow-md">
+        <p className="text-xs font-medium text-muted-foreground">{data.month}</p>
+        <p className="text-sm font-bold text-primary">${Math.round(data.balance).toLocaleString()}</p>
+      </div>
+    );
+  }
+  return null;
+};
+
 export function AutoLoanCalculator() {
   const [price, setPrice] = useState(35000);
   const [tradeIn, setTradeIn] = useState(5000);
@@ -327,10 +344,7 @@ export function AutoLoanCalculator() {
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--color-border)" />
                   <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 10 }} />
                   <YAxis axisLine={false} tickLine={false} tickFormatter={(val) => `$${val/1000}k`} />
-                  <Tooltip 
-                    contentStyle={{ borderRadius: '8px' }}
-                    formatter={(value: number) => [`$${Math.round(value).toLocaleString()}`, 'Balance']}
-                  />
+                  <Tooltip content={<CustomTooltip />} />
                   <Area 
                     type="monotone" 
                     dataKey="balance" 
