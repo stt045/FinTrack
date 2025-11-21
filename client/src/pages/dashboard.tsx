@@ -68,7 +68,7 @@ export default function Dashboard() {
           {tools.map((tool) => (
             <Link key={tool.href} href={tool.href}>
               <a className="block group">
-                <Card className="h-full transition-all hover:shadow-md hover:border-primary/50">
+                <Card className="h-full transition-all hover:shadow-md hover:border-primary/50 hover:scale-105">
                   <CardHeader>
                     <div className="flex items-center justify-between mb-2">
                       <div className={`p-3 rounded-lg ${tool.bg}`}>
