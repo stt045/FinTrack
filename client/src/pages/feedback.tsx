@@ -7,9 +7,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 import { useMutation, useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { MessageSquare, Send } from "lucide-react";
-import type { Feedback } from "@shared/schema";
+import type { Feedback, User } from "@shared/schema";
 import { formatDistanceToNow } from "date-fns";
 
 export default function FeedbackPage() {
@@ -22,15 +23,32 @@ export default function FeedbackPage() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const loadMoreRef = useRef<HTMLDivElement>(null);
+  
+  const { user, isLoading } = useAuth();
+
+  // Auto-populate name and email from logged-in user
+  useEffect(() => {
+    if (user && !isLoading) {
+      const typedUser = user as User | null;
+      if (typedUser) {
+        const fullName = [typedUser.firstName, typedUser.lastName]
+          .filter(Boolean)
+          .join(" ")
+          .trim();
+        setName(fullName || "");
+        setEmail(typedUser.email || "");
+      }
+    }
+  }, [user, isLoading]);
 
   const {
     data,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useInfiniteQuery<Feedback[], Error, Feedback[], string[], string | undefined>({
+  } = useInfiniteQuery({
     queryKey: ["feedback"],
-    queryFn: async ({ pageParam }) => {
+    queryFn: async ({ pageParam }: { pageParam?: string }) => {
       const url = pageParam
         ? `/api/feedback?limit=20&cursor=${pageParam}`
         : "/api/feedback?limit=20";
@@ -38,7 +56,7 @@ export default function FeedbackPage() {
       if (!response.ok) throw new Error("Failed to fetch feedback");
       return response.json() as Promise<Feedback[]>;
     },
-    getNextPageParam: (lastPage) => {
+    getNextPageParam: (lastPage: Feedback[]) => {
       if (lastPage.length === 0) return undefined;
       const lastItem = lastPage[lastPage.length - 1];
       return lastItem.createdAt.toString();
@@ -64,9 +82,12 @@ export default function FeedbackPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["feedback"] });
       setComment("");
-      setName("");
-      setEmail("");
       setIsAnonymous(false);
+      // Reset name/email only if not logged in
+      if (!user) {
+        setName("");
+        setEmail("");
+      }
       toast({
         title: "Feedback submitted!",
         description: "Thank you for your feedback.",
@@ -170,7 +191,7 @@ export default function FeedbackPage() {
                 </Label>
               </div>
 
-              {!isAnonymous && (
+              {!isAnonymous && !user && (
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Name (optional)</Label>
@@ -192,6 +213,16 @@ export default function FeedbackPage() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                     />
+                  </div>
+                </div>
+              )}
+
+              {!isAnonymous && user && (
+                <div className="bg-muted/50 border border-border rounded-lg p-4 space-y-2">
+                  <p className="text-sm font-medium">Your information</p>
+                  <div className="space-y-1">
+                    <p className="text-sm text-foreground">{name || "Your name"}</p>
+                    <p className="text-sm text-muted-foreground">{email}</p>
                   </div>
                 </div>
               )}
@@ -229,7 +260,7 @@ export default function FeedbackPage() {
                 </div>
               ) : (
                 <>
-                  {allFeedback.map((item: Feedback) => (
+                  {allFeedback.map((item) => (
                     <div
                       key={item.id}
                       data-testid={`feedback-${item.id}`}
