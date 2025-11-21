@@ -6,6 +6,8 @@ import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from "recharts";
+import { TooltipProvider, Tooltip as UITooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { HelpCircle } from "lucide-react";
 
 export function CompoundInterestCalculator() {
   const [principal, setPrincipal] = useState(100000);
@@ -90,7 +92,17 @@ export function CompoundInterestCalculator() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
-            <Label>Initial Investment</Label>
+            <div className="flex items-center gap-1">
+              <Label>Initial Investment</Label>
+              <UITooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p className="text-sm max-w-xs">Your starting amount. A higher initial investment generates more compound interest over time.</p>
+                </TooltipContent>
+              </UITooltip>
+            </div>
             <div className="flex items-center gap-4">
               <NumberInput 
                 value={principal} 
@@ -107,7 +119,17 @@ export function CompoundInterestCalculator() {
           </div>
 
           <div className="space-y-2">
-            <Label>{contributionLabel}</Label>
+            <div className="flex items-center gap-1">
+              <Label>{contributionLabel}</Label>
+              <UITooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p className="text-sm max-w-xs">Regular additions to your investment. Larger contributions significantly accelerate growth through compound interest.</p>
+                </TooltipContent>
+              </UITooltip>
+            </div>
             <div className="flex items-center gap-4">
               <NumberInput 
                 value={contribution} 
@@ -124,7 +146,17 @@ export function CompoundInterestCalculator() {
           </div>
 
           <div className="space-y-2">
-            <Label>Interest Rate (%)</Label>
+            <div className="flex items-center gap-1">
+              <Label>Interest Rate (%)</Label>
+              <UITooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p className="text-sm max-w-xs">Annual return on your investment. Even small increases significantly boost your final balance over decades.</p>
+                </TooltipContent>
+              </UITooltip>
+            </div>
             <div className="flex items-center gap-4">
               <NumberInput 
                 value={rate} 
@@ -141,7 +173,17 @@ export function CompoundInterestCalculator() {
           </div>
 
           <div className="space-y-2">
-            <Label>Investment Period (Years)</Label>
+            <div className="flex items-center gap-1">
+              <Label>Investment Period (Years)</Label>
+              <UITooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p className="text-sm max-w-xs">Time horizon for your investment. Longer periods allow compound interest to work more powerfully.</p>
+                </TooltipContent>
+              </UITooltip>
+            </div>
             <div className="flex items-center gap-4">
               <NumberInput 
                 value={years} 
@@ -158,7 +200,17 @@ export function CompoundInterestCalculator() {
           </div>
 
           <div className="space-y-2">
-            <Label>Compounding Frequency</Label>
+            <div className="flex items-center gap-1">
+              <Label>Compounding Frequency</Label>
+              <UITooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p className="text-sm max-w-xs">How often interest is compounded. More frequent compounding generates slightly higher returns.</p>
+                </TooltipContent>
+              </UITooltip>
+            </div>
             <Select value={frequency} onValueChange={setFrequency}>
               <SelectTrigger>
                 <SelectValue />

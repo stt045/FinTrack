@@ -106,7 +106,17 @@ export function MortgageCalculator() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
-            <Label>Home Price</Label>
+            <div className="flex items-center gap-1">
+              <Label>Home Price</Label>
+              <UITooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p className="text-sm max-w-xs">Total purchase price of the property. Higher prices increase your loan amount and monthly payment.</p>
+                </TooltipContent>
+              </UITooltip>
+            </div>
             <NumberInput 
               value={homePrice} 
               onChange={setHomePrice}

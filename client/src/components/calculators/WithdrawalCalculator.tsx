@@ -6,6 +6,8 @@ import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts";
+import { TooltipProvider, Tooltip as UITooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { HelpCircle } from "lucide-react";
 
 export function WithdrawalCalculator() {
   const [balance, setBalance] = useState(500000);
@@ -53,7 +55,17 @@ export function WithdrawalCalculator() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
-            <Label>Starting Balance</Label>
+            <div className="flex items-center gap-1">
+              <Label>Starting Balance</Label>
+              <UITooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p className="text-sm max-w-xs">Your retirement portfolio at the start. Higher balances last longer.</p>
+                </TooltipContent>
+              </UITooltip>
+            </div>
             <NumberInput 
               value={balance} 
               onChange={setBalance}
@@ -62,7 +74,17 @@ export function WithdrawalCalculator() {
           </div>
 
           <div className="space-y-2">
-            <Label>Monthly Withdrawal</Label>
+            <div className="flex items-center gap-1">
+              <Label>Monthly Withdrawal</Label>
+              <UITooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p className="text-sm max-w-xs">Amount withdrawn each month. Higher withdrawals deplete your portfolio faster.</p>
+                </TooltipContent>
+              </UITooltip>
+            </div>
             <NumberInput 
               value={withdrawal} 
               onChange={setWithdrawal}
@@ -71,7 +93,17 @@ export function WithdrawalCalculator() {
           </div>
 
           <div className="space-y-2">
-            <Label>Annual Return (%)</Label>
+            <div className="flex items-center gap-1">
+              <Label>Annual Return (%)</Label>
+              <UITooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p className="text-sm max-w-xs">Expected yearly investment returns. Higher returns extend how long your money lasts.</p>
+                </TooltipContent>
+              </UITooltip>
+            </div>
             <NumberInput 
               value={rate} 
               onChange={setRate}
@@ -80,7 +112,17 @@ export function WithdrawalCalculator() {
           </div>
 
           <div className="space-y-2">
-            <Label>Inflation Rate (%)</Label>
+            <div className="flex items-center gap-1">
+              <Label>Inflation Rate (%)</Label>
+              <UITooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p className="text-sm max-w-xs">Annual increase in living costs. Your withdrawals increase each year to maintain purchasing power.</p>
+                </TooltipContent>
+              </UITooltip>
+            </div>
             <NumberInput 
               value={inflation} 
               onChange={setInflation}
