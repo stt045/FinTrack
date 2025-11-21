@@ -8,6 +8,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { TooltipProvider, Tooltip as UITooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, AreaChart, Area, XAxis, YAxis, CartesianGrid, BarChart, Bar } from "recharts";
+import { HelpCircle } from "lucide-react";
 
 interface TooltipPayload {
   payload?: Record<string, any>;
@@ -161,31 +162,81 @@ export function AutoLoanCalculator() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
-            <Label>Vehicle Price</Label>
+            <div className="flex items-center gap-1">
+              <Label>Vehicle Price</Label>
+              <UITooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p className="text-sm max-w-xs">Total purchase price of the vehicle. This is the starting point for calculating your loan amount.</p>
+                </TooltipContent>
+              </UITooltip>
+            </div>
             <NumberInput value={price} onChange={setPrice} />
             <Slider value={[price]} min={5000} max={150000} step={500} onValueChange={(v) => setPrice(v[0])} />
           </div>
 
           <div className="space-y-2">
-            <Label>Trade-in Value</Label>
+            <div className="flex items-center gap-1">
+              <Label>Trade-in Value</Label>
+              <UITooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p className="text-sm max-w-xs">Value of your current vehicle if trading in. Reduces the amount you need to finance.</p>
+                </TooltipContent>
+              </UITooltip>
+            </div>
             <NumberInput value={tradeIn} onChange={setTradeIn} />
             <Slider value={[tradeIn]} min={0} max={50000} step={100} onValueChange={(v) => setTradeIn(v[0])} />
           </div>
 
           <div className="space-y-2">
-            <Label>Down Payment</Label>
+            <div className="flex items-center gap-1">
+              <Label>Down Payment</Label>
+              <UITooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p className="text-sm max-w-xs">Cash paid upfront. Larger down payments reduce your loan amount and monthly payment.</p>
+                </TooltipContent>
+              </UITooltip>
+            </div>
             <NumberInput value={downPayment} onChange={setDownPayment} />
             <Slider value={[downPayment]} min={0} max={20000} step={100} onValueChange={(v) => setDownPayment(v[0])} />
           </div>
 
           <div className="space-y-2">
-            <Label>Interest Rate (%)</Label>
+            <div className="flex items-center gap-1">
+              <Label>Interest Rate (%)</Label>
+              <UITooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p className="text-sm max-w-xs">Annual interest rate on the loan. Higher rates increase your monthly payment and total interest paid.</p>
+                </TooltipContent>
+              </UITooltip>
+            </div>
             <NumberInput value={rate} onChange={setRate} />
             <Slider value={[rate]} min={0} max={20} step={0.1} onValueChange={(v) => setRate(v[0])} />
           </div>
 
           <div className="space-y-2">
-            <Label>Loan Term ({months} months)</Label>
+            <div className="flex items-center gap-1">
+              <Label>Loan Term ({months} months)</Label>
+              <UITooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p className="text-sm max-w-xs">Length of the loan in months. Longer terms lower monthly payments but increase total interest paid.</p>
+                </TooltipContent>
+              </UITooltip>
+            </div>
             <Slider value={[months]} min={12} max={96} step={12} onValueChange={(v) => setMonths(v[0])} />
           </div>
 
@@ -193,23 +244,63 @@ export function AutoLoanCalculator() {
             <h3 className="font-medium">Taxes & Fees</h3>
             
             <div className="space-y-2">
-              <Label>Sales Tax Rate (%)</Label>
+              <div className="flex items-center gap-1">
+                <Label>Sales Tax Rate (%)</Label>
+                <UITooltip delayDuration={0}>
+                  <TooltipTrigger asChild>
+                    <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    <p className="text-sm max-w-xs">State/local sales tax applied to vehicle purchase. Varies by location.</p>
+                  </TooltipContent>
+                </UITooltip>
+              </div>
               <NumberInput value={salesTaxRate} onChange={setSalesTaxRate} />
               <Slider value={[salesTaxRate]} min={0} max={15} step={0.1} onValueChange={(v) => setSalesTaxRate(v[0])} />
             </div>
 
             <div className="space-y-2">
-              <Label>Title & Registration ($)</Label>
+              <div className="flex items-center gap-1">
+                <Label>Title & Registration ($)</Label>
+                <UITooltip delayDuration={0}>
+                  <TooltipTrigger asChild>
+                    <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    <p className="text-sm max-w-xs">Government fees for title transfer and vehicle registration.</p>
+                  </TooltipContent>
+                </UITooltip>
+              </div>
               <NumberInput value={titleFees} onChange={setTitleFees} />
             </div>
 
             <div className="space-y-2">
-              <Label>Dealer Fees ($)</Label>
+              <div className="flex items-center gap-1">
+                <Label>Dealer Fees ($)</Label>
+                <UITooltip delayDuration={0}>
+                  <TooltipTrigger asChild>
+                    <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    <p className="text-sm max-w-xs">Dealership charges for documentation, processing, and preparation.</p>
+                  </TooltipContent>
+                </UITooltip>
+              </div>
               <NumberInput value={dealerFees} onChange={setDealerFees} />
             </div>
 
             <div className="space-y-2">
-              <Label>Other Fees (Warranty, etc) ($)</Label>
+              <div className="flex items-center gap-1">
+                <Label>Other Fees (Warranty, etc) ($)</Label>
+                <UITooltip delayDuration={0}>
+                  <TooltipTrigger asChild>
+                    <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    <p className="text-sm max-w-xs">Additional costs like extended warranties, maintenance plans, or add-on packages.</p>
+                  </TooltipContent>
+                </UITooltip>
+              </div>
               <NumberInput value={otherFees} onChange={setOtherFees} />
             </div>
 

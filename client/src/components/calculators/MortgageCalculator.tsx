@@ -8,6 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { HelpCircle } from "lucide-react";
 
 export function MortgageCalculator() {
   const [homePrice, setHomePrice] = useState(800000);
@@ -125,7 +126,17 @@ export function MortgageCalculator() {
           </div>
 
           <div className="space-y-2">
-            <Label>Down Payment ({Math.round((downPayment/homePrice)*100)}%)</Label>
+            <div className="flex items-center gap-1">
+              <Label>Down Payment ({Math.round((downPayment/homePrice)*100)}%)</Label>
+              <UITooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p className="text-sm max-w-xs">Amount paid upfront. Larger down payments reduce the loan amount and lower monthly payments.</p>
+                </TooltipContent>
+              </UITooltip>
+            </div>
             <NumberInput 
               value={downPayment} 
               onChange={setDownPayment}
@@ -134,7 +145,17 @@ export function MortgageCalculator() {
           </div>
 
           <div className="space-y-2">
-            <Label>Interest Rate (%)</Label>
+            <div className="flex items-center gap-1">
+              <Label>Interest Rate (%)</Label>
+              <UITooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p className="text-sm max-w-xs">Annual mortgage rate. Higher rates significantly increase your monthly payment and total interest paid.</p>
+                </TooltipContent>
+              </UITooltip>
+            </div>
             <NumberInput 
               value={rate} 
               onChange={setRate}
@@ -143,7 +164,17 @@ export function MortgageCalculator() {
           </div>
 
           <div className="space-y-2">
-            <Label>Loan Term (Years)</Label>
+            <div className="flex items-center gap-1">
+              <Label>Loan Term (Years)</Label>
+              <UITooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p className="text-sm max-w-xs">Mortgage duration. Longer terms lower monthly payments but increase total interest paid over time.</p>
+                </TooltipContent>
+              </UITooltip>
+            </div>
             <NumberInput 
               value={term} 
               onChange={setTerm}
@@ -155,7 +186,17 @@ export function MortgageCalculator() {
              <h3 className="font-medium">Additional Costs</h3>
              
              <div className="space-y-2">
-               <Label>Property Tax ($/Year)</Label>
+               <div className="flex items-center gap-1">
+                 <Label>Property Tax ($/Year)</Label>
+                 <UITooltip delayDuration={0}>
+                   <TooltipTrigger asChild>
+                     <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                   </TooltipTrigger>
+                   <TooltipContent side="right">
+                     <p className="text-sm max-w-xs">Annual property tax on your home. This is typically a percentage of your home value.</p>
+                   </TooltipContent>
+                 </UITooltip>
+               </div>
                <NumberInput 
                  value={propertyTax} 
                  onChange={setPropertyTax}
@@ -163,7 +204,17 @@ export function MortgageCalculator() {
              </div>
 
              <div className="space-y-2">
-               <Label>Home Insurance ($/Year)</Label>
+               <div className="flex items-center gap-1">
+                 <Label>Home Insurance ($/Year)</Label>
+                 <UITooltip delayDuration={0}>
+                   <TooltipTrigger asChild>
+                     <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                   </TooltipTrigger>
+                   <TooltipContent side="right">
+                     <p className="text-sm max-w-xs">Annual homeowners insurance cost. Lenders typically require this as part of your monthly payment.</p>
+                   </TooltipContent>
+                 </UITooltip>
+               </div>
                <NumberInput 
                  value={homeInsurance} 
                  onChange={setHomeInsurance}
@@ -171,7 +222,17 @@ export function MortgageCalculator() {
              </div>
 
              <div className="space-y-2">
-               <Label>HOA Fees ($/Month)</Label>
+               <div className="flex items-center gap-1">
+                 <Label>HOA Fees ($/Month)</Label>
+                 <UITooltip delayDuration={0}>
+                   <TooltipTrigger asChild>
+                     <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                   </TooltipTrigger>
+                   <TooltipContent side="right">
+                     <p className="text-sm max-w-xs">Monthly homeowners association fees for community maintenance. Only applies if your home is part of an HOA.</p>
+                   </TooltipContent>
+                 </UITooltip>
+               </div>
                <NumberInput 
                  value={hoaFees} 
                  onChange={setHoaFees}
@@ -179,7 +240,17 @@ export function MortgageCalculator() {
              </div>
 
              <div className="space-y-2">
-               <Label>Mello-Roos Tax ($/Year)</Label>
+               <div className="flex items-center gap-1">
+                 <Label>Mello-Roos Tax ($/Year)</Label>
+                 <UITooltip delayDuration={0}>
+                   <TooltipTrigger asChild>
+                     <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                   </TooltipTrigger>
+                   <TooltipContent side="right">
+                     <p className="text-sm max-w-xs">Special property tax assessment for community development. Common in new neighborhoods in California and other states.</p>
+                   </TooltipContent>
+                 </UITooltip>
+               </div>
                <NumberInput 
                  value={melloRoos} 
                  onChange={setMelloRoos}
