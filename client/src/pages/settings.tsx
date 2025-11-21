@@ -222,6 +222,7 @@ function ProfileTab({ user }: { user: any }) {
               variant="outline"
               onClick={() => setShowPasswordChange(true)}
               data-testid="button-change-password"
+              className="cursor-pointer"
             >
               Change Password
             </Button>
