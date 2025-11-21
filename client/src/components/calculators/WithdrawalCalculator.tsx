@@ -4,6 +4,7 @@ import { NumberInput } from "@/components/ui/number-input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts";
 
 export function WithdrawalCalculator() {
@@ -130,6 +131,38 @@ export function WithdrawalCalculator() {
                   />
                 </LineChart>
               </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Annual Withdrawal Schedule</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="border rounded-md overflow-hidden">
+              <div className="max-h-[400px] overflow-y-auto">
+                <Table>
+                  <TableHeader className="sticky top-0 bg-card z-10">
+                    <TableRow>
+                      <TableHead>Year</TableHead>
+                      <TableHead className="text-right">Withdrawal</TableHead>
+                      <TableHead className="text-right">Ending Balance</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {data.map((row, i) => (
+                      <TableRow key={i}>
+                        <TableCell className="font-medium">{row.year}</TableCell>
+                        <TableCell className="text-right font-mono text-orange-600">-${row.withdrawal.toLocaleString()}</TableCell>
+                        <TableCell className={`text-right font-mono font-bold ${row.balance === 0 ? 'text-destructive' : ''}`}>
+                          ${row.balance.toLocaleString()}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
             </div>
           </CardContent>
         </Card>

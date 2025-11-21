@@ -4,7 +4,8 @@ import { NumberInput } from "@/components/ui/number-input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from "recharts";
 
 export function CompoundInterestCalculator() {
   const [principal, setPrincipal] = useState(100000);
@@ -50,11 +51,28 @@ export function CompoundInterestCalculator() {
         interest: Math.round(balance - totalContributed)
       });
     }
-    return result;
+    
+    const totalInterest = Math.round(balance - totalContributed);
+    const totalPrincipal = principal;
+    const totalAdditional = Math.round(totalContributed - principal);
+
+    const pieData = [
+      { name: 'Initial Principal', value: totalPrincipal, color: 'var(--color-primary)' },
+      { name: 'Additional Contributions', value: totalAdditional, color: 'var(--color-secondary)' },
+      { name: 'Interest Earned', value: totalInterest, color: 'var(--color-chart-3)' },
+    ];
+
+    return {
+      annualData: result,
+      pieData,
+      finalBalance: Math.round(balance),
+      totalInterest,
+      totalContributed: Math.round(totalContributed)
+    };
   }, [principal, monthly, rate, years, frequency]);
 
-  const finalBalance = data[data.length - 1].balance;
-  const totalInterest = data[data.length - 1].interest;
+  const finalBalance = data.finalBalance;
+  const totalInterest = data.totalInterest;
 
   return (
     <div className="grid lg:grid-cols-3 gap-8">
@@ -175,7 +193,7 @@ export function CompoundInterestCalculator() {
           <CardContent>
             <div className="h-[400px] w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                <AreaChart data={data.annualData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                   <defs>
                     <linearGradient id="colorBalance" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="var(--color-primary)" stopOpacity={0.3}/>
@@ -223,6 +241,91 @@ export function CompoundInterestCalculator() {
                   />
                 </AreaChart>
               </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Balance Breakdown</CardTitle>
+            </CardHeader>
+            <CardContent className="h-[300px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={data.pieData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={80}
+                    paddingAngle={5}
+                    dataKey="value"
+                  >
+                    {data.pieData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip formatter={(val: number) => `$${val.toLocaleString()}`} />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Summary</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex justify-between py-2 border-b">
+                <span className="text-muted-foreground">Initial Investment</span>
+                <span className="font-mono font-medium">${principal.toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between py-2 border-b">
+                <span className="text-muted-foreground">Total Contributions</span>
+                <span className="font-mono font-medium">${(data.totalContributed - principal).toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between py-2 border-b">
+                <span className="text-muted-foreground">Total Interest</span>
+                <span className="font-mono font-medium text-green-600">+${totalInterest.toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between py-2 border-b bg-muted/20 px-2 -mx-2 rounded">
+                <span className="font-medium">Final Balance</span>
+                <span className="font-mono font-bold text-primary">${finalBalance.toLocaleString()}</span>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Annual Schedule</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="border rounded-md overflow-hidden">
+              <div className="max-h-[400px] overflow-y-auto">
+                <Table>
+                  <TableHeader className="sticky top-0 bg-card z-10">
+                    <TableRow>
+                      <TableHead>Year</TableHead>
+                      <TableHead className="text-right">Contributed</TableHead>
+                      <TableHead className="text-right">Interest</TableHead>
+                      <TableHead className="text-right">Balance</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {data.annualData.map((row, i) => (
+                      <TableRow key={i}>
+                        <TableCell className="font-medium">Year {row.year}</TableCell>
+                        <TableCell className="text-right font-mono">${row.contributed.toLocaleString()}</TableCell>
+                        <TableCell className="text-right font-mono text-green-600">+${row.interest.toLocaleString()}</TableCell>
+                        <TableCell className="text-right font-mono font-bold">${row.balance.toLocaleString()}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
             </div>
           </CardContent>
         </Card>
