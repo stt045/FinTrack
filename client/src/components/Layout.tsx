@@ -22,12 +22,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
       {/* Header */}
       <header className="border-b bg-card sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-primary font-bold text-xl tracking-tight">
+          <Link href="/">
+          <a className="flex items-center gap-2 text-primary font-bold text-xl tracking-tight hover:opacity-80 transition-opacity">
             <div className="bg-primary/10 p-2 rounded-lg">
               <TrendingUp className="h-6 w-6 text-primary" />
             </div>
             <span className="font-roboto">FinPlan</span>
-          </div>
+          </a>
+        </Link>
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-1">
