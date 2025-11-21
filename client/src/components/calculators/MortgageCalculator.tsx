@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -13,15 +14,33 @@ export function MortgageCalculator() {
   const [rate, setRate] = useState(6.5);
   const [term, setTerm] = useState(30);
   const [viewMode, setViewMode] = useState("annual");
+  
+  // Additional Costs
+  const [propertyTax, setPropertyTax] = useState(3000); // Annual
+  const [homeInsurance, setHomeInsurance] = useState(1000); // Annual
+  const [hoaFees, setHoaFees] = useState(0); // Monthly
+  const [melloRoos, setMelloRoos] = useState(0); // Annual
+  const [includeExtraCosts, setIncludeExtraCosts] = useState(true);
 
-  const { monthlyPayment, totalInterest, annualData, monthlyData } = useMemo(() => {
+  const { monthlyPayment, totalMonthlyPayment, totalInterest, annualData, monthlyData, totalAnnualExtras } = useMemo(() => {
     const loanAmount = homePrice - downPayment;
     const r = rate / 100 / 12;
     const n = term * 12;
     
     // M = P [ i(1 + i)^n ] / [ (1 + i)^n – 1 ]
-    const monthly = (loanAmount * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+    const monthlyPrincipalAndInterest = (loanAmount * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
     
+    // Calculate monthly extras
+    const monthlyPropertyTax = propertyTax / 12;
+    const monthlyHomeInsurance = homeInsurance / 12;
+    const monthlyMelloRoos = melloRoos / 12;
+    const totalMonthlyExtras = monthlyPropertyTax + monthlyHomeInsurance + hoaFees + monthlyMelloRoos;
+    
+    const totalMonthlyPayment = monthlyPrincipalAndInterest + totalMonthlyExtras;
+    
+    // Value to use for "Payment" column/display based on toggle
+    const paymentForDisplay = includeExtraCosts ? totalMonthlyPayment : monthlyPrincipalAndInterest;
+
     let balance = loanAmount;
     let totalInt = 0;
     const annualData = [];
@@ -31,21 +50,24 @@ export function MortgageCalculator() {
     for (let year = 1; year <= term; year++) {
       let yearlyInterest = 0;
       let yearlyPrincipal = 0;
+      let yearlyExtras = 0;
 
       for (let m = 0; m < 12; m++) {
         const interestPayment = balance * r;
-        const principalPayment = monthly - interestPayment;
+        const principalPayment = monthlyPrincipalAndInterest - interestPayment;
         
         yearlyInterest += interestPayment;
         yearlyPrincipal += principalPayment;
         balance -= principalPayment;
         totalInt += interestPayment;
+        yearlyExtras += totalMonthlyExtras;
 
         monthlyData.push({
           period: `Month ${((year - 1) * 12) + m + 1}`,
-          payment: monthly,
+          payment: paymentForDisplay,
           principal: principalPayment,
           interest: interestPayment,
+          extras: totalMonthlyExtras,
           balance: Math.max(0, balance)
         });
       }
@@ -53,22 +75,26 @@ export function MortgageCalculator() {
       annualData.push({
         year: `Year ${year}`,
         period: `Year ${year}`,
-        payment: monthly * 12,
+        payment: paymentForDisplay * 12,
         principal: Math.round(yearlyPrincipal),
         interest: Math.round(yearlyInterest),
+        extras: Math.round(yearlyExtras),
         balance: Math.round(Math.max(0, balance))
       });
     }
 
     return {
-      monthlyPayment: monthly,
+      monthlyPayment: monthlyPrincipalAndInterest,
+      totalMonthlyPayment,
       totalInterest: totalInt,
       annualData,
-      monthlyData
+      monthlyData,
+      totalAnnualExtras: propertyTax + homeInsurance + (hoaFees * 12) + melloRoos
     };
-  }, [homePrice, downPayment, rate, term]);
+  }, [homePrice, downPayment, rate, term, propertyTax, homeInsurance, hoaFees, melloRoos, includeExtraCosts]);
 
   const displayData = viewMode === "annual" ? annualData : monthlyData;
+  const hasExtras = totalAnnualExtras > 0;
 
   return (
     <div className="grid lg:grid-cols-3 gap-8">
@@ -121,6 +147,50 @@ export function MortgageCalculator() {
             />
             <Slider value={[term]} min={10} max={40} step={5} onValueChange={(v) => setTerm(v[0])} />
           </div>
+
+          <div className="pt-4 border-t space-y-4">
+             <h3 className="font-medium">Additional Costs</h3>
+             
+             <div className="space-y-2">
+               <Label>Property Tax ($/Year)</Label>
+               <Input 
+                 type="number" 
+                 value={propertyTax} 
+                 onChange={(e) => setPropertyTax(Number(e.target.value))}
+                 className="font-mono"
+               />
+             </div>
+
+             <div className="space-y-2">
+               <Label>Home Insurance ($/Year)</Label>
+               <Input 
+                 type="number" 
+                 value={homeInsurance} 
+                 onChange={(e) => setHomeInsurance(Number(e.target.value))}
+                 className="font-mono"
+               />
+             </div>
+
+             <div className="space-y-2">
+               <Label>HOA Fees ($/Month)</Label>
+               <Input 
+                 type="number" 
+                 value={hoaFees} 
+                 onChange={(e) => setHoaFees(Number(e.target.value))}
+                 className="font-mono"
+               />
+             </div>
+
+             <div className="space-y-2">
+               <Label>Mello-Roos Tax ($/Year)</Label>
+               <Input 
+                 type="number" 
+                 value={melloRoos} 
+                 onChange={(e) => setMelloRoos(Number(e.target.value))}
+                 className="font-mono"
+               />
+             </div>
+          </div>
         </CardContent>
       </Card>
 
@@ -130,9 +200,11 @@ export function MortgageCalculator() {
             <CardContent className="pt-6">
               <div className="text-sm font-medium text-muted-foreground">Monthly Payment</div>
               <div className="text-3xl font-bold text-secondary mt-2">
-                ${Math.round(monthlyPayment).toLocaleString()}
+                ${Math.round(includeExtraCosts ? totalMonthlyPayment : monthlyPayment).toLocaleString()}
               </div>
-              <div className="text-xs text-muted-foreground mt-1">Principal & Interest only</div>
+              <div className="text-xs text-muted-foreground mt-1">
+                {includeExtraCosts ? "Includes taxes & fees" : "Principal & Interest only"}
+              </div>
             </CardContent>
           </Card>
           <Card>
@@ -144,6 +216,27 @@ export function MortgageCalculator() {
             </CardContent>
           </Card>
         </div>
+
+        {hasExtras && (
+          <Card className="bg-muted/50">
+            <CardContent className="pt-6 flex items-center justify-between">
+               <div>
+                 <div className="text-sm font-medium text-muted-foreground">Total Annual Extra Costs</div>
+                 <div className="text-2xl font-bold text-foreground mt-1">
+                   ${totalAnnualExtras.toLocaleString()}
+                 </div>
+               </div>
+               <div className="flex items-center gap-2">
+                 <Label htmlFor="include-extras" className="cursor-pointer">Include in Schedule</Label>
+                 <Switch 
+                   id="include-extras"
+                   checked={includeExtraCosts}
+                   onCheckedChange={setIncludeExtraCosts}
+                 />
+               </div>
+            </CardContent>
+          </Card>
+        )}
 
         <Card>
           <CardHeader>
