@@ -75,7 +75,7 @@ export function CompoundInterestCalculator() {
             <Slider 
               value={[principal]} 
               min={0} 
-              max={100000} 
+              max={300000} 
               step={500} 
               onValueChange={(v) => setPrincipal(v[0])} 
             />
