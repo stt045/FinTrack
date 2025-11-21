@@ -86,7 +86,7 @@ export function AutoLoanCalculator() {
 
       // Add to chart data
       chartData.push({
-        month: m,
+        month: `Month ${m}`,
         balance: Math.round(balance),
         interest: Math.round(interestPayment),
         principal: Math.round(principalPayment)
