@@ -36,6 +36,23 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
       onChange?.(numValue)
     }
 
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Enter") {
+        e.preventDefault()
+        const inputs = Array.from(
+          document.querySelectorAll("input:not([disabled]), select:not([disabled]), textarea:not([disabled])")
+        )
+        const index = inputs.indexOf(e.currentTarget)
+        if (index > -1 && index < inputs.length - 1) {
+          const next = inputs[index + 1] as HTMLElement
+          next.focus()
+        } else {
+          e.currentTarget.blur()
+        }
+      }
+      props.onKeyDown?.(e)
+    }
+
     return (
       <Input
         ref={ref}
@@ -43,6 +60,7 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
         inputMode="decimal"
         value={displayValue}
         onChange={handleChange}
+        onKeyDown={handleKeyDown}
         className={cn("font-mono", className)}
         {...props}
       />
