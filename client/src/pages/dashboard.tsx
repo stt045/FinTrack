@@ -56,7 +56,7 @@ export default function Dashboard() {
               Powerful calculators to help you make informed decisions about investing, retirement, buying a home, and more.
             </p>
             <Link href="/compound-interest">
-              <button className="bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8 rounded-md font-medium transition-colors">
+              <button className="bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8 rounded-md font-medium transition-colors cursor-pointer">
                 Start Calculating
               </button>
             </Link>
