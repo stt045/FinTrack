@@ -101,6 +101,15 @@ export function AutoLoanCalculator() {
       d.interest = Math.round(d.interest);
     });
 
+    // Generate chart data based on annual vs monthly not needed here since calculated separately below, 
+    // but we need a unified way to display chart data based on viewMode
+    const annualChartData = annualData.map(d => ({
+      month: d.year, // using 'month' key to match XAxis dataKey or we can make it dynamic
+      balance: d.balance,
+      interest: d.interest,
+      principal: d.principal
+    }));
+
     const pieData = [
       { name: 'Vehicle Price', value: price, color: 'var(--color-primary)' },
       { name: 'Interest', value: totalInterest, color: 'var(--color-chart-4)' },
@@ -118,11 +127,13 @@ export function AutoLoanCalculator() {
       pieData,
       annualData,
       monthlyData,
-      chartData
+      chartData,
+      annualChartData
     };
   }, [price, tradeIn, downPayment, rate, months, salesTaxRate, titleFees, dealerFees, otherFees, includeFeesInLoan]);
 
   const displayData = viewMode === "annual" ? calculations.annualData : calculations.monthlyData;
+  const displayChartData = viewMode === "annual" ? calculations.annualChartData : calculations.chartData;
 
   return (
     <div className="grid lg:grid-cols-3 gap-8">
@@ -306,7 +317,7 @@ export function AutoLoanCalculator() {
           <CardContent className="space-y-6">
             <div className="h-[300px] w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={calculations.chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                <AreaChart data={displayChartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                   <defs>
                     <linearGradient id="colorBalance" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="var(--color-primary)" stopOpacity={0.3}/>
