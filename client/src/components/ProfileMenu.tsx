@@ -27,7 +27,7 @@ export function ProfileMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="rounded-full" data-testid="button-profile-menu">
+        <Button variant="ghost" size="icon" className="rounded-full cursor-pointer" data-testid="button-profile-menu">
           <Avatar className="h-8 w-8">
             {user.profileImageUrl && <AvatarImage src={user.profileImageUrl} alt={user.firstName || "User"} />}
             <AvatarFallback>{initials || "U"}</AvatarFallback>
