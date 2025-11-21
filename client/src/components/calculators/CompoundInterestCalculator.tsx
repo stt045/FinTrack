@@ -9,10 +9,18 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 
 export function CompoundInterestCalculator() {
   const [principal, setPrincipal] = useState(100000);
-  const [monthly, setMonthly] = useState(2000);
+  const [contribution, setContribution] = useState(2000);
   const [rate, setRate] = useState(10);
   const [years, setYears] = useState(30);
   const [frequency, setFrequency] = useState("12"); // 12 = monthly
+
+  const contributionLabel = useMemo(() => {
+    switch(frequency) {
+      case "1": return "Annual Contribution";
+      case "365": return "Daily Contribution";
+      default: return "Monthly Contribution";
+    }
+  }, [frequency]);
 
   const data = useMemo(() => {
     const result = [];
@@ -20,8 +28,11 @@ export function CompoundInterestCalculator() {
     let totalContributed = principal;
     const r = rate / 100;
     const n = parseInt(frequency);
-    const monthlyRate = r / 12;
-
+    
+    // Normalize calculation to always run monthly for chart smoothness, but respect the contribution/compounding frequency
+    // Wait, if we change contribution frequency, we should probably stick to a standard loop but apply contributions correctly
+    // Actually, standard compound interest formula iterates by period 'n'.
+    
     for (let year = 0; year <= years; year++) {
       if (year === 0) {
         result.push({
@@ -33,15 +44,11 @@ export function CompoundInterestCalculator() {
         continue;
       }
 
-      // Simple monthly loop for accuracy with monthly contributions
-      for (let m = 0; m < 12; m++) {
-        balance += monthly;
-        totalContributed += monthly;
-        // Interest adds based on compounding frequency
-        // Simplified: Applying monthly rate for visualization smoothness,
-        // but technically compounding happens at 'n'.
-        // For n=12 (monthly), this is accurate.
-        balance *= (1 + r/n) ** (n/12);
+      // We need to compound 'n' times per year
+      for (let period = 0; period < n; period++) {
+        balance += contribution;
+        totalContributed += contribution;
+        balance *= (1 + r/n);
       }
       
       result.push({
@@ -69,7 +76,7 @@ export function CompoundInterestCalculator() {
       totalInterest,
       totalContributed: Math.round(totalContributed)
     };
-  }, [principal, monthly, rate, years, frequency]);
+  }, [principal, contribution, rate, years, frequency]);
 
   const finalBalance = data.finalBalance;
   const totalInterest = data.totalInterest;
@@ -100,19 +107,19 @@ export function CompoundInterestCalculator() {
           </div>
 
           <div className="space-y-2">
-            <Label>Monthly Contribution</Label>
+            <Label>{contributionLabel}</Label>
             <div className="flex items-center gap-4">
               <NumberInput 
-                value={monthly} 
-                onChange={setMonthly}
+                value={contribution} 
+                onChange={setContribution}
               />
             </div>
             <Slider 
-              value={[monthly]} 
+              value={[contribution]} 
               min={0} 
               max={5000} 
               step={50} 
-              onValueChange={(v) => setMonthly(v[0])} 
+              onValueChange={(v) => setContribution(v[0])} 
             />
           </div>
 
