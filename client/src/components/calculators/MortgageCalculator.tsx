@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { NumberInput } from "@/components/ui/number-input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
+import { TooltipProvider, Tooltip as UITooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Switch } from "@/components/ui/switch";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -268,15 +269,42 @@ export function MortgageCalculator() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {displayData.map((row, i) => (
-                      <TableRow key={i}>
-                        <TableCell className="font-medium">{row.period}</TableCell>
-                        <TableCell className="text-right font-mono">${Math.round(row.payment).toLocaleString()}</TableCell>
-                        <TableCell className="text-right font-mono text-primary">${Math.round(row.principal).toLocaleString()}</TableCell>
-                        <TableCell className="text-right font-mono text-destructive">${Math.round(row.interest).toLocaleString()}</TableCell>
-                        <TableCell className="text-right font-mono">${Math.round(row.balance).toLocaleString()}</TableCell>
-                      </TableRow>
-                    ))}
+                    {displayData.map((row, i) => {
+                      const isYearMark = viewMode === "monthly" && (i + 1) % 12 === 0;
+                      const yearNum = Math.floor((i + 1) / 12);
+                      
+                      return (
+                        <>
+                          <TableRow key={i}>
+                            <TableCell className="font-medium">{row.period}</TableCell>
+                            <TableCell className="text-right font-mono">${Math.round(row.payment).toLocaleString()}</TableCell>
+                            <TableCell className="text-right font-mono text-primary">${Math.round(row.principal).toLocaleString()}</TableCell>
+                            <TableCell className="text-right font-mono text-destructive">${Math.round(row.interest).toLocaleString()}</TableCell>
+                            <TableCell className="text-right font-mono">${Math.round(row.balance).toLocaleString()}</TableCell>
+                          </TableRow>
+                          {isYearMark && (
+                            <TableRow className="hover:bg-transparent">
+                              <TableCell colSpan={5} className="p-0">
+                                <UITooltip>
+                                  <TooltipTrigger asChild>
+                                    <div className="h-2 bg-muted-foreground/10 w-full my-2 relative group cursor-help">
+                                      <div className="absolute inset-0 flex items-center justify-center">
+                                        <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">
+                                          Year {yearNum} Completed
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </TooltipTrigger>
+                                  <TooltipContent side="right">
+                                    <p className="font-bold">End of Year {yearNum}</p>
+                                  </TooltipContent>
+                                </UITooltip>
+                              </TableCell>
+                            </TableRow>
+                          )}
+                        </>
+                      );
+                    })}
                   </TableBody>
                 </Table>
               </div>
