@@ -248,6 +248,7 @@ export function MortgageCalculator() {
                   <Tooltip 
                     cursor={{fill: 'transparent'}}
                     contentStyle={{ borderRadius: '8px' }}
+                    formatter={(value: number) => [`$${Math.round(value).toLocaleString()}`, undefined]}
                   />
                   <Legend />
                   <Bar dataKey="principal" stackId="a" fill="var(--color-primary)" name="Principal" radius={[0, 0, 4, 4]} />
