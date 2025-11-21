@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
-import { TrendingUp, Wallet, Home, Car, LayoutDashboard, Menu, X } from "lucide-react";
+import { TrendingUp, Wallet, Home, Car, LayoutDashboard, Menu, X, MessageSquare } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -11,6 +11,7 @@ const navItems = [
   { href: "/withdrawal", label: "Retirement Plan", icon: Wallet },
   { href: "/mortgage", label: "Mortgage", icon: Home },
   { href: "/auto-loan", label: "Auto Loan", icon: Car },
+  { href: "/feedback", label: "Feedback", icon: MessageSquare },
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
