@@ -5,12 +5,21 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 
+// Pages
+import Dashboard from "@/pages/dashboard";
+import CompoundInterestPage from "@/pages/compound-interest";
+import WithdrawalPage from "@/pages/withdrawal";
+import MortgagePage from "@/pages/mortgage";
+import AutoLoanPage from "@/pages/auto-loan";
+
 function Router() {
   return (
     <Switch>
-      {/* Add pages below */}
-      {/* <Route path="/" component={Home}/> */}
-      {/* Fallback to 404 */}
+      <Route path="/" component={Dashboard} />
+      <Route path="/compound-interest" component={CompoundInterestPage} />
+      <Route path="/withdrawal" component={WithdrawalPage} />
+      <Route path="/mortgage" component={MortgagePage} />
+      <Route path="/auto-loan" component={AutoLoanPage} />
       <Route component={NotFound} />
     </Switch>
   );
