@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { NumberInput } from "@/components/ui/number-input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
@@ -106,44 +106,36 @@ export function MortgageCalculator() {
         <CardContent className="space-y-6">
           <div className="space-y-2">
             <Label>Home Price</Label>
-            <Input 
-              type="number" 
+            <NumberInput 
               value={homePrice} 
-              onChange={(e) => setHomePrice(Number(e.target.value))}
-              className="font-mono"
+              onChange={setHomePrice}
             />
             <Slider value={[homePrice]} min={50000} max={1000000} step={5000} onValueChange={(v) => setHomePrice(v[0])} />
           </div>
 
           <div className="space-y-2">
             <Label>Down Payment ({Math.round((downPayment/homePrice)*100)}%)</Label>
-            <Input 
-              type="number" 
+            <NumberInput 
               value={downPayment} 
-              onChange={(e) => setDownPayment(Number(e.target.value))}
-              className="font-mono"
+              onChange={setDownPayment}
             />
             <Slider value={[downPayment]} min={0} max={homePrice} step={1000} onValueChange={(v) => setDownPayment(v[0])} />
           </div>
 
           <div className="space-y-2">
             <Label>Interest Rate (%)</Label>
-            <Input 
-              type="number" 
+            <NumberInput 
               value={rate} 
-              onChange={(e) => setRate(Number(e.target.value))}
-              className="font-mono"
+              onChange={setRate}
             />
             <Slider value={[rate]} min={1} max={12} step={0.1} onValueChange={(v) => setRate(v[0])} />
           </div>
 
           <div className="space-y-2">
             <Label>Loan Term (Years)</Label>
-            <Input 
-              type="number" 
+            <NumberInput 
               value={term} 
-              onChange={(e) => setTerm(Number(e.target.value))}
-              className="font-mono"
+              onChange={setTerm}
             />
             <Slider value={[term]} min={10} max={40} step={5} onValueChange={(v) => setTerm(v[0])} />
           </div>
@@ -153,41 +145,33 @@ export function MortgageCalculator() {
              
              <div className="space-y-2">
                <Label>Property Tax ($/Year)</Label>
-               <Input 
-                 type="number" 
+               <NumberInput 
                  value={propertyTax} 
-                 onChange={(e) => setPropertyTax(Number(e.target.value))}
-                 className="font-mono"
+                 onChange={setPropertyTax}
                />
              </div>
 
              <div className="space-y-2">
                <Label>Home Insurance ($/Year)</Label>
-               <Input 
-                 type="number" 
+               <NumberInput 
                  value={homeInsurance} 
-                 onChange={(e) => setHomeInsurance(Number(e.target.value))}
-                 className="font-mono"
+                 onChange={setHomeInsurance}
                />
              </div>
 
              <div className="space-y-2">
                <Label>HOA Fees ($/Month)</Label>
-               <Input 
-                 type="number" 
+               <NumberInput 
                  value={hoaFees} 
-                 onChange={(e) => setHoaFees(Number(e.target.value))}
-                 className="font-mono"
+                 onChange={setHoaFees}
                />
              </div>
 
              <div className="space-y-2">
                <Label>Mello-Roos Tax ($/Year)</Label>
-               <Input 
-                 type="number" 
+               <NumberInput 
                  value={melloRoos} 
-                 onChange={(e) => setMelloRoos(Number(e.target.value))}
-                 className="font-mono"
+                 onChange={setMelloRoos}
                />
              </div>
           </div>

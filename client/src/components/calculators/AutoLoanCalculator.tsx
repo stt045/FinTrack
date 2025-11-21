@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { NumberInput } from "@/components/ui/number-input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
@@ -52,25 +52,25 @@ export function AutoLoanCalculator() {
         <CardContent className="space-y-6">
           <div className="space-y-2">
             <Label>Vehicle Price</Label>
-            <Input type="number" value={price} onChange={(e) => setPrice(Number(e.target.value))} />
+            <NumberInput value={price} onChange={setPrice} />
             <Slider value={[price]} min={5000} max={150000} step={500} onValueChange={(v) => setPrice(v[0])} />
           </div>
 
           <div className="space-y-2">
             <Label>Trade-in Value</Label>
-            <Input type="number" value={tradeIn} onChange={(e) => setTradeIn(Number(e.target.value))} />
+            <NumberInput value={tradeIn} onChange={setTradeIn} />
             <Slider value={[tradeIn]} min={0} max={50000} step={100} onValueChange={(v) => setTradeIn(v[0])} />
           </div>
 
           <div className="space-y-2">
             <Label>Down Payment</Label>
-            <Input type="number" value={downPayment} onChange={(e) => setDownPayment(Number(e.target.value))} />
+            <NumberInput value={downPayment} onChange={setDownPayment} />
             <Slider value={[downPayment]} min={0} max={20000} step={100} onValueChange={(v) => setDownPayment(v[0])} />
           </div>
 
           <div className="space-y-2">
             <Label>Interest Rate (%)</Label>
-            <Input type="number" value={rate} onChange={(e) => setRate(Number(e.target.value))} />
+            <NumberInput value={rate} onChange={setRate} />
             <Slider value={[rate]} min={0} max={20} step={0.1} onValueChange={(v) => setRate(v[0])} />
           </div>
 

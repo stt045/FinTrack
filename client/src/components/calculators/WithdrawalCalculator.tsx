@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { NumberInput } from "@/components/ui/number-input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -53,44 +53,36 @@ export function WithdrawalCalculator() {
         <CardContent className="space-y-6">
           <div className="space-y-2">
             <Label>Starting Balance</Label>
-            <Input 
-              type="number" 
+            <NumberInput 
               value={balance} 
-              onChange={(e) => setBalance(Number(e.target.value))}
-              className="font-mono"
+              onChange={setBalance}
             />
             <Slider value={[balance]} min={10000} max={2000000} step={10000} onValueChange={(v) => setBalance(v[0])} />
           </div>
 
           <div className="space-y-2">
             <Label>Monthly Withdrawal</Label>
-            <Input 
-              type="number" 
+            <NumberInput 
               value={withdrawal} 
-              onChange={(e) => setWithdrawal(Number(e.target.value))}
-              className="font-mono"
+              onChange={setWithdrawal}
             />
             <Slider value={[withdrawal]} min={500} max={20000} step={100} onValueChange={(v) => setWithdrawal(v[0])} />
           </div>
 
           <div className="space-y-2">
             <Label>Annual Return (%)</Label>
-            <Input 
-              type="number" 
+            <NumberInput 
               value={rate} 
-              onChange={(e) => setRate(Number(e.target.value))}
-              className="font-mono"
+              onChange={setRate}
             />
             <Slider value={[rate]} min={0} max={15} step={0.5} onValueChange={(v) => setRate(v[0])} />
           </div>
 
           <div className="space-y-2">
             <Label>Inflation Rate (%)</Label>
-            <Input 
-              type="number" 
+            <NumberInput 
               value={inflation} 
-              onChange={(e) => setInflation(Number(e.target.value))}
-              className="font-mono"
+              onChange={setInflation}
             />
             <Slider value={[inflation]} min={0} max={10} step={0.5} onValueChange={(v) => setInflation(v[0])} />
           </div>

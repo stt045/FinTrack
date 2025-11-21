@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { NumberInput } from "@/components/ui/number-input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -67,11 +67,9 @@ export function CompoundInterestCalculator() {
           <div className="space-y-2">
             <Label>Initial Investment</Label>
             <div className="flex items-center gap-4">
-              <Input 
-                type="number" 
+              <NumberInput 
                 value={principal} 
-                onChange={(e) => setPrincipal(Number(e.target.value))}
-                className="font-mono"
+                onChange={setPrincipal}
               />
             </div>
             <Slider 
@@ -86,11 +84,9 @@ export function CompoundInterestCalculator() {
           <div className="space-y-2">
             <Label>Monthly Contribution</Label>
             <div className="flex items-center gap-4">
-              <Input 
-                type="number" 
+              <NumberInput 
                 value={monthly} 
-                onChange={(e) => setMonthly(Number(e.target.value))}
-                className="font-mono"
+                onChange={setMonthly}
               />
             </div>
             <Slider 
@@ -105,11 +101,9 @@ export function CompoundInterestCalculator() {
           <div className="space-y-2">
             <Label>Interest Rate (%)</Label>
             <div className="flex items-center gap-4">
-              <Input 
-                type="number" 
+              <NumberInput 
                 value={rate} 
-                onChange={(e) => setRate(Number(e.target.value))}
-                className="font-mono"
+                onChange={setRate}
               />
             </div>
             <Slider 
@@ -124,11 +118,9 @@ export function CompoundInterestCalculator() {
           <div className="space-y-2">
             <Label>Investment Period (Years)</Label>
             <div className="flex items-center gap-4">
-              <Input 
-                type="number" 
+              <NumberInput 
                 value={years} 
-                onChange={(e) => setYears(Number(e.target.value))}
-                className="font-mono"
+                onChange={setYears}
               />
             </div>
             <Slider 
