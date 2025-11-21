@@ -61,19 +61,19 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <div className="flex items-center gap-2">
             {!isLoading && (
               isAuthenticated ? (
-                <a href="/api/logout" className="hidden md:block">
-                  <Button variant="outline" size="sm" className="flex items-center gap-2" data-testid="button-logout">
+                <Button asChild variant="outline" size="sm" className="hidden md:flex items-center gap-2" data-testid="button-logout">
+                  <a href="/api/logout">
                     <LogOut className="h-4 w-4" />
                     Log out
-                  </Button>
-                </a>
+                  </a>
+                </Button>
               ) : (
-                <a href="/api/login" className="hidden md:block">
-                  <Button size="sm" className="flex items-center gap-2" data-testid="button-login">
+                <Button asChild size="sm" className="hidden md:flex items-center gap-2" data-testid="button-login">
+                  <a href="/api/login">
                     <LogIn className="h-4 w-4" />
                     Log in
-                  </Button>
-                </a>
+                  </a>
+                </Button>
               )
             )}
           </div>
@@ -110,19 +110,19 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <div className="border-t pt-4 mt-4">
                   {!isLoading && (
                     isAuthenticated ? (
-                      <a href="/api/logout" className="block">
-                        <Button variant="outline" className="w-full flex items-center gap-2" data-testid="button-logout-mobile">
+                      <Button asChild variant="outline" className="w-full flex items-center gap-2" data-testid="button-logout-mobile">
+                        <a href="/api/logout">
                           <LogOut className="h-4 w-4" />
                           Log out
-                        </Button>
-                      </a>
+                        </a>
+                      </Button>
                     ) : (
-                      <a href="/api/login" className="block">
-                        <Button className="w-full flex items-center gap-2" data-testid="button-login-mobile">
+                      <Button asChild className="w-full flex items-center gap-2" data-testid="button-login-mobile">
+                        <a href="/api/login">
                           <LogIn className="h-4 w-4" />
                           Log in
-                        </Button>
-                      </a>
+                        </a>
+                      </Button>
                     )
                   )}
                 </div>
