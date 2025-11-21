@@ -7,10 +7,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 export function CompoundInterestCalculator() {
-  const [principal, setPrincipal] = useState(10000);
-  const [monthly, setMonthly] = useState(500);
-  const [rate, setRate] = useState(7);
-  const [years, setYears] = useState(20);
+  const [principal, setPrincipal] = useState(100000);
+  const [monthly, setMonthly] = useState(2000);
+  const [rate, setRate] = useState(10);
+  const [years, setYears] = useState(30);
   const [frequency, setFrequency] = useState("12"); // 12 = monthly
 
   const data = useMemo(() => {
